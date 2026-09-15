@@ -1,0 +1,32 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { formatDate, getNotaUrl, type Nota } from '@/utils';
+
+interface Props {
+  nota: Nota;
+}
+
+const { nota } = Astro.props;
+const canonicalPath = getNotaUrl(nota);
+---
+
+<BaseLayout title={nota.data.title} description={nota.data.description} canonicalPath={canonicalPath}>
+  <article class="prose">
+    <header class="article-header">
+      <h1>{nota.data.title}</h1>
+      <p class="meta">
+        <time datetime={nota.data.date.toISOString()}>{formatDate(nota.data.date)}</time>
+        {nota.data.updated && <> · Actualizado el <time datetime={nota.data.updated.toISOString()}>{formatDate(nota.data.updated)}</time></>}
+      </p>
+      <p>{nota.data.description}</p>
+      {
+        nota.data.tags.length > 0 && (
+          <ul class="tags" aria-label="Etiquetas">
+            {nota.data.tags.map((tag) => <li class="tag">{tag}</li>)}
+          </ul>
+        )
+      }
+    </header>
+    <slot />
+  </article>
+</BaseLayout>

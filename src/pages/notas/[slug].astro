@@ -1,0 +1,21 @@
+---
+import { getCollection, render } from 'astro:content';
+import ArticleLayout from '@/layouts/ArticleLayout.astro';
+import { getNotaSlug, sortNotasByDate } from '@/utils';
+
+export async function getStaticPaths() {
+  const notes = sortNotasByDate(await getCollection('notas', ({ data }) => !data.draft));
+
+  return notes.map((nota) => ({
+    params: { slug: getNotaSlug(nota) },
+    props: { nota },
+  }));
+}
+
+const { nota } = Astro.props;
+const { Content } = await render(nota);
+---
+
+<ArticleLayout nota={nota}>
+  <Content />
+</ArticleLayout>

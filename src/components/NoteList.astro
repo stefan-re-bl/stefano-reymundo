@@ -1,0 +1,30 @@
+---
+import type { Nota } from '@/utils';
+import { formatDate, getNotaUrl, withBase } from '@/utils';
+
+interface Props {
+  notes: Nota[];
+  headingLevel?: 2 | 3;
+}
+
+const { notes, headingLevel = 2 } = Astro.props;
+const Heading = `h${headingLevel}`;
+---
+
+<ul class="note-list">
+  {
+    notes.map((note) => (
+      <li class="note-item">
+        <article>
+          <Heading>
+            <a href={withBase(getNotaUrl(note))}>{note.data.title}</a>
+          </Heading>
+          <p class="meta">
+            <time datetime={note.data.date.toISOString()}>{formatDate(note.data.date)}</time>
+          </p>
+          <p>{note.data.description}</p>
+        </article>
+      </li>
+    ))
+  }
+</ul>

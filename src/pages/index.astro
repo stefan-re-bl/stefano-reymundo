@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import NoteList from '@/components/NoteList.astro';
+import { site } from '@/config';
+import { sortNotasByDate } from '@/utils';
+
+const notes = sortNotasByDate(await getCollection('notas', ({ data }) => !data.draft)).slice(0, 5);
+---
+
+<BaseLayout>
+  <section class="intro" aria-labelledby="inicio-title">
+    <h1 id="inicio-title">¡Bienvenido/a!</h1>
+    <p class="role">Blog sobre desarrollo de software</p>
+    <p>{site.description}</p>
+  </section>
+
+  <section aria-labelledby="ultimas-notas">
+    <h2 class="section-heading" id="ultimas-notas">Últimas notas</h2>
+    <NoteList notes={notes} headingLevel={3} />
+  </section>
+</BaseLayout>

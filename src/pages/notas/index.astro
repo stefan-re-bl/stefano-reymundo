@@ -1,0 +1,14 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import NoteList from '@/components/NoteList.astro';
+import { sortNotasByDate } from '@/utils';
+
+const notes = sortNotasByDate(await getCollection('notas', ({ data }) => !data.draft));
+---
+
+<BaseLayout title="Notas" description="Archivo cronológico de notas sobre software, trabajo y práctica profesional." canonicalPath="/notas/">
+  <h1 class="page-title">Notas</h1>
+  <p class="page-description">Ensayos y apuntes sobre software, decisiones técnicas y oficio profesional.</p>
+  <NoteList notes={notes} />
+</BaseLayout>
